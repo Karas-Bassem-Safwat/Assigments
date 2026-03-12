@@ -174,13 +174,31 @@ Answer :
 Both are use to compare between two things (variable and another one or variable and value) but “===” compares value and data type not value only
 
 
-// *4. Explain how try-catch works and why it is important in async operations. 
-// Answer : 
+*4. Explain how try-catch works and why it is important in async operations. 
+Answer : 
+ is JavaScript's primary mechanism for handling runtime errors gracefully instead of crashing your program.
+Simple example :
+try {
+  const result = riskyOperation();
+} catch (error) {
+  console.error("Something went wrong:", error.message);
+} finally {
+  cleanup();
+}
+
+*5. What’s the difference between type conversion and coercion? Provide examples of each. 
+Answer : 
+Both transform a value from one type to another — the key difference is intent and control.
+example :
+Type Conversion you convert manually:
+
+Number("42")
+String(99)
+Boolean(0)
 
 
-
-// *5. What’s the difference between type conversion and coercion? Provide examples of each. 
-// Answer : 
-
+Type Coercion JS converts automatically:
+"5" + 2
+"5" - 2 
 
 */
