@@ -35,7 +35,7 @@ console.log("5)");
 let q5_1 = [1, 2, 3];
 let q5_2 = [4, 5, 6];
 console.log(q5_1.concat(q5_2));
-console.log("anoteher Solution:\n"[(q5_1, q5_2)]);
+console.log("anoteher Solution:\n"[(q5_1,q5_2)]);
 console.log("================");
 
 // 6. Use a switch statement to return the day of the week given a number (1 = Sunday …., 7 = Saturday).   Input Example: 2  Output Example: “Monday”
