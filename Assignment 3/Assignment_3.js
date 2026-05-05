@@ -125,7 +125,7 @@ http.createServer(async (req, res) => {
 });
 
 let add_user = async (data, res) => {
-    data = JSON.parse(data);
+        
     const users = await getusers();
     const { name, age, email } = data;
     const index = users.findIndex((element) => {
@@ -152,33 +152,7 @@ let update_user = async (data, id, res) => {
     const users = await getusers();
     data = JSON.parse(data);
     const { name, age, email } = data;
-    const index = users.findIndex((element) => {
-        return element.id == id;
-    });
-    if (index == -1) {
-        res.write("User ID not found");
-        return res.end();
-    }
-    if (email) {
-        const email_exist = users.findIndex((element) => {
-            return element.email == email;
-        });
-        if (email_exist != -1 && email_exist != index) {
-            res.write("Email already exist");
-            return res.end();
-        }
-        users[index].email = email;
-    }
-    if (name) {
-        users[index].name = name;
-        res.write("user name updated successfully");
-    }
-    if (age) {
-        users[index].age = age;
-        res.write("user age updated successfully");
-    }
-    await writeusers(users);
-    return res.end();
+
 }
 
 let delete_user = async (id, res) => {
