@@ -30,4 +30,4 @@ export const bootstrap = async () => {
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`)
     })
-}
+    }

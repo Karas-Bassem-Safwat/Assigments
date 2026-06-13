@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: [true, "Name is required"] },
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
     email: {
       type: String,
       unique: true,
@@ -10,8 +13,14 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    password: { type: String, required: [true, "Password is required"] },
-    phone: { type: String, required: [true, "Phone is required"] },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Phone is required"],
+    },
     age: {
       type: Number,
       min: [18, "Age must be at least 18"],
@@ -22,4 +31,5 @@ const userSchema = new mongoose.Schema(
 );
 
 const User = mongoose.model("User", userSchema);
+
 export default User;
