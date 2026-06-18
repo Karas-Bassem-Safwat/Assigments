@@ -1,13 +1,5 @@
-import CryptoJS from "crypto-js";
 import User from "../../DB/models/user.model.js";
-
-const decryptPhone = (enc) => {
-  const bytes = CryptoJS.AES.decrypt(enc, process.env.CRYPTO_SECRET);
-  return bytes.toString(CryptoJS.enc.Utf8);
-};
-
-const encryptPhone = (phone) =>
-  CryptoJS.AES.encrypt(phone, process.env.CRYPTO_SECRET).toString();
+import { encryptPhone, decryptPhone } from "../../utils/encryption.js";
 
 export const getUserService = async (userId) => {
   const user = await User.findById(userId).lean();

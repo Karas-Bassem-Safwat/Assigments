@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Note from "../models/note.model.js";
 
-// ─── 1. Create a note ────────────────────────────────────────────────────────
 export const createNote = async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -14,7 +13,6 @@ export const createNote = async (req, res) => {
   }
 };
 
-// ─── 2. Update a single note by id (owner only) ──────────────────────────────
 export const updateNote = async (req, res) => {
   try {
     const { noteId } = req.params;
@@ -36,7 +34,6 @@ export const updateNote = async (req, res) => {
   }
 };
 
-// ─── 3. Replace entire note document (owner only) ────────────────────────────
 export const replaceNote = async (req, res) => {
   try {
     const { noteId } = req.params;
@@ -47,7 +44,6 @@ export const replaceNote = async (req, res) => {
     if (note.userId.toString() !== userId)
       return res.status(403).json({ message: "You are not the owner" });
 
-    // findOneAndReplace replaces the whole document
     const replaced = await Note.findOneAndReplace(
       { _id: noteId },
       { ...req.body, userId },
@@ -60,7 +56,6 @@ export const replaceNote = async (req, res) => {
   }
 };
 
-// ─── 4. Update title of ALL notes for logged-in user ─────────────────────────
 export const updateAllNotesTitles = async (req, res) => {
   try {
     const userId = req.userId;
@@ -76,7 +71,6 @@ export const updateAllNotesTitles = async (req, res) => {
   }
 };
 
-// ─── 5. Delete a single note by id (owner only) ──────────────────────────────
 export const deleteNote = async (req, res) => {
   try {
     const { noteId } = req.params;
@@ -94,7 +88,6 @@ export const deleteNote = async (req, res) => {
   }
 };
 
-// ─── 6. Paginate & sort notes (descending createdAt) ─────────────────────────
 export const getPaginatedNotes = async (req, res) => {
   try {
     const userId = req.userId;
@@ -113,7 +106,6 @@ export const getPaginatedNotes = async (req, res) => {
   }
 };
 
-// ─── 7. Get a note by id (owner only) ────────────────────────────────────────
 export const getNoteById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -130,7 +122,6 @@ export const getNoteById = async (req, res) => {
   }
 };
 
-// ─── 8. Get a note by content ─────────────────────────────────────────────────
 export const getNoteByContent = async (req, res) => {
   try {
     const userId = req.userId;
@@ -148,7 +139,6 @@ export const getNoteByContent = async (req, res) => {
   }
 };
 
-// ─── 9. Get notes with user info (selected fields only) ──────────────────────
 export const getNotesWithUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -163,7 +153,6 @@ export const getNotesWithUser = async (req, res) => {
   }
 };
 
-// ─── 10. Aggregate notes with user info + title search ───────────────────────
 export const aggregateNotes = async (req, res) => {
   try {
     const userId = req.userId;
@@ -202,7 +191,6 @@ export const aggregateNotes = async (req, res) => {
   }
 };
 
-// ─── 11. Delete ALL notes for logged-in user ─────────────────────────────────
 export const deleteAllNotes = async (req, res) => {
   try {
     const userId = req.userId;

@@ -3,31 +3,25 @@ import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-// Helper: encrypt phone
 const encryptPhone = (phone) =>
   CryptoJS.AES.encrypt(phone, process.env.CRYPTO_SECRET).toString();
 
-// Helper: decrypt phone
 export const decryptPhone = (encryptedPhone) => {
   const bytes = CryptoJS.AES.decrypt(encryptedPhone, process.env.CRYPTO_SECRET);
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
-// ─── 1. Signup ───────────────────────────────────────────────────────────────
 export const signup = async (req, res) => {
   try {
     const { name, email, password, phone, age } = req.body;
 
-    // Check if email already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(409).json({ message: "Email already exists." });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Encrypt phone
     const encryptedPhone = encryptPhone(phone);
 
     const newUser = await User.create({
@@ -44,7 +38,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// ─── 2. Login ────────────────────────────────────────────────────────────────
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -69,7 +62,6 @@ export const login = async (req, res) => {
   }
 };
 
-// ─── 3. Update logged-in user (except password) ──────────────────────────────
 export const updateUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -80,7 +72,6 @@ export const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // If updating email, check it doesn't already exist
     if (email && email.toLowerCase() !== user.email) {
       const emailExists = await User.findOne({ email: email.toLowerCase() });
       if (emailExists) {
@@ -104,7 +95,6 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// ─── 4. Delete logged-in user ────────────────────────────────────────────────
 export const deleteUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -120,7 +110,6 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// ─── 5. Get logged-in user ───────────────────────────────────────────────────
 export const getUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -130,7 +119,6 @@ export const getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Decrypt phone before returning
     user.phone = decryptPhone(user.phone);
 
     res.status(200).json(user);

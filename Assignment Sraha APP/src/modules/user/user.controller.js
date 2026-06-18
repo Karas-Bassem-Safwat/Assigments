@@ -4,11 +4,9 @@ import { getUserService, updateUserService, deleteUserService } from "./user.ser
 
 const router = Router();
 
-// All user routes require authentication
 router.use(authMiddleware);
 
-// GET /users
-router.get("/", async (req, res) => {
+router.get("/signup", async (req, res) => {
   try {
     const { status, data } = await getUserService(req.userId);
     res.status(status).json(data);
@@ -17,7 +15,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// PATCH /users
 router.patch("/", async (req, res) => {
   try {
     const { status, data } = await updateUserService(req.userId, req.body);
@@ -27,7 +24,6 @@ router.patch("/", async (req, res) => {
   }
 });
 
-// DELETE /users
 router.delete("/", async (req, res) => {
   try {
     const { status, data } = await deleteUserService(req.userId);

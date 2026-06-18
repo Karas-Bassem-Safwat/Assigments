@@ -7,7 +7,6 @@ const noteSchema = new mongoose.Schema(
       required: [true, "Title is required"],
       validate: {
         validator: function (value) {
-          // Title must NOT be entirely uppercase
           return value !== value.toUpperCase();
         },
         message:

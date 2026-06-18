@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       min: [18, "Age must be at least 18"],
       max: [60, "Age must be at most 60"],
     },
+    confirmEmail: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

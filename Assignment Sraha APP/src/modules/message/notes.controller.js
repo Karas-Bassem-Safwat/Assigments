@@ -16,10 +16,8 @@ import {
 
 const router = Router();
 
-// All note routes require authentication
 router.use(authMiddleware);
 
-// ⚠️ Specific named routes BEFORE parameterised /:id routes
 router.get("/paginate-sort", async (req, res) => {
   try {
     const page  = parseInt(req.query.page)  || 1;
