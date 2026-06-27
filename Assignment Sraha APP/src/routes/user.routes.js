@@ -16,4 +16,5 @@ router.patch("/", authMiddleware, updateUser);
 router.delete("/", authMiddleware, deleteUser);
 router.get("/", authMiddleware, getUser);
 
+
 export default router;
