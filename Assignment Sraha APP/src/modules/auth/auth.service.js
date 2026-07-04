@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../../DB/models/user.model.js";
-import Otp from "../../DB/models/otp.model.js";
+import redisClient from "../../DB/redis.js";
 import { encryptPhone } from "../../utils/encryption.js";
 import { generateOtp, hashOtp, compareOtp } from "../../utils/otp.js";
 import { sendEmail } from "../../utils/sendEmail.js";
+import { otpEmailTemplate } from "../../utils/emailTemplates.js";
 
 export const signupService = async ({ name, email, password, phone, age }) => {
   const existing = await User.findOne({ email: email.toLowerCase() });
@@ -17,12 +18,12 @@ export const signupService = async ({ name, email, password, phone, age }) => {
 
   const otp = generateOtp();
   const hashedOtp = await hashOtp(otp);
-  await Otp.create({ userId: newUser._id, otp: hashedOtp });
+  await redisClient.setEx(`otp:${newUser._id}`, 300, hashedOtp);
 
   await sendEmail({
     to: newUser.email,
     subject: "Verify your email",
-    html: `<h2>Your verification code is: ${otp}</h2><p>This code expires in 5 minutes.</p>`,
+    html: otpEmailTemplate(otp),
   });
 
   return { status: 201, data: { message: "User added successfully. A verification code was sent to your email." } };
@@ -33,17 +34,17 @@ export const confirmEmailService = async ({ email, otp }) => {
   if (!user) return { status: 404, data: { message: "User not found" } };
   if (user.confirmEmail) return { status: 400, data: { message: "Email is already verified." } };
 
-  const otpDoc = await Otp.findOne({ userId: user._id });
-  if (!otpDoc) {
+  const hashedOtp = await redisClient.get(`otp:${user._id}`);
+  if (!hashedOtp) {
     return { status: 400, data: { message: "Verification code expired or not found. Please request a new one." } };
   }
 
-  const isMatch = await compareOtp(otp, otpDoc.otp);
+  const isMatch = await compareOtp(otp, hashedOtp);
   if (!isMatch) return { status: 400, data: { message: "Invalid verification code." } };
 
   user.confirmEmail = true;
   await user.save();
-  await Otp.deleteOne({ _id: otpDoc._id });
+  await redisClient.del(`otp:${user._id}`);
 
   return { status: 200, data: { message: "Email verified successfully." } };
 };
