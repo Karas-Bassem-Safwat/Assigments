@@ -5,7 +5,7 @@ import redisClient from "../../DB/redis.js";
 import { encryptPhone } from "../../utils/encryption.js";
 import { generateOtp, hashOtp, compareOtp } from "../../utils/otp.js";
 import { sendEmail } from "../../utils/sendEmail.js";
-import { otpEmailTemplate } from "../../utils/emailTemplates.js";
+import { otpEmailTemplate, resetPasswordEmailTemplate } from "../../utils/emailTemplates.js";
 
 export const signupService = async ({ name, email, password, phone, age }) => {
   const existing = await User.findOne({ email: email.toLowerCase() });
@@ -58,4 +58,40 @@ export const loginService = async ({ email, password }) => {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
   return { status: 200, data: { message: "Login successful", token } };
+};
+
+export const forgotPasswordService = async ({ email }) => {
+  const user = await User.findOne({ email: email.toLowerCase() });
+  if (!user) return { status: 404, data: { message: "User not found" } };
+
+  const otp = generateOtp();
+  const hashedOtp = await hashOtp(otp);
+  await redisClient.setEx(`resetPassword:${user._id}`, 300, hashedOtp);
+
+  await sendEmail({
+    to: user.email,
+    subject: "Reset your password",
+    html: resetPasswordEmailTemplate(otp),
+  });
+
+  return { status: 200, data: { message: "A password reset code was sent to your email." } };
+};
+
+export const resetPasswordService = async ({ email, otp, newPassword }) => {
+  const user = await User.findOne({ email: email.toLowerCase() });
+  if (!user) return { status: 404, data: { message: "User not found" } };
+
+  const hashedOtp = await redisClient.get(`resetPassword:${user._id}`);
+  if (!hashedOtp) {
+    return { status: 400, data: { message: "Reset code expired or not found. Please request a new one." } };
+  }
+
+  const isMatch = await compareOtp(otp, hashedOtp);
+  if (!isMatch) return { status: 400, data: { message: "Invalid reset code." } };
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
+  await redisClient.del(`resetPassword:${user._id}`);
+
+  return { status: 200, data: { message: "Password has been reset successfully." } };
 };
