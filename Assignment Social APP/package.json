@@ -9,7 +9,10 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.1",
     "morgan": "^1.11.0",
-    "multer": "^2.2.0"
+    "multer": "^2.2.0",
+    "nodemailer": "^9.0.5",
+    "redis": "^6.2.0",
+    "zod": "^4.4.3"
   },
   "scripts": {
     "build": "tsc --watch",
@@ -20,6 +23,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/morgan": "^1.9.10"
+    "@types/morgan": "^1.9.10",
+    "@types/nodemailer": "^8.0.1"
   }
 }

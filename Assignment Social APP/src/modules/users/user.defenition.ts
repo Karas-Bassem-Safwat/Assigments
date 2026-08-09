@@ -1,28 +1,28 @@
 export enum Gender {
-    male,
-    female
+  male,
+  female,
 }
 
 export enum Role {
-    user,
-    admin,
-    super_admin,
-    super_super_admin,
+  user,
+  admin,
+  super_admin,
+  super_super_admin,
 }
 
-export interface Iuser{
-name: string
-email: string
-password: string
-age: number
-isOnIine: boolean
-isActive: boolean
-gender: Gender
-phone: string
-confirmedAt: Date
-changedCredentialsAt: Date
-role: Role
-profilePic: string
-coverPics: [string]
-bio: string
+export interface Iuser {
+  name: string;
+  email: string;
+  password: string;
+  age: number;
+  bio: string;
+  isOnIine: boolean;
+  isActive: boolean;
+  gender: Gender;
+  phone: string;
+  confirmedAt: Date | null;
+  changedCredentialsAt: Date | null;
+  role: Role;
+  profilePic: string | null;
+  coverPics: string[];
 }
