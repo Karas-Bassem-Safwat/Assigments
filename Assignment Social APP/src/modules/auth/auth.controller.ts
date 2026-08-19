@@ -5,7 +5,7 @@ import { loginSchema, signUpSchema, verifyOtpSchema } from "./aut.validation";
 
 const router = Router();
 
-// ─── POST /auth/signup ───────────────────────────────────────────────────────
+
 router.post(
   "/signup",
   validation(signUpSchema),
@@ -23,7 +23,7 @@ router.post(
   }
 );
 
-// ─── POST /auth/verify-otp ───────────────────────────────────────────────────
+
 router.post(
   "/verify-otp",
   validation(verifyOtpSchema),
@@ -41,7 +41,7 @@ router.post(
   }
 );
 
-// ─── POST /auth/login ────────────────────────────────────────────────────────
+
 router.post(
   "/login",
   validation(loginSchema),

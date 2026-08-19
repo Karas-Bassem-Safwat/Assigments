@@ -1,3 +1,5 @@
+import { HydratedDocument } from "mongoose";
+
 export enum Gender {
   male,
   female,
@@ -25,4 +27,8 @@ export interface Iuser {
   role: Role;
   profilePic: string | null;
   coverPics: string[];
+  received: [Huser];
+  sent: [Huser];
 }
+
+export type Huser = HydratedDocument<Iuser>;

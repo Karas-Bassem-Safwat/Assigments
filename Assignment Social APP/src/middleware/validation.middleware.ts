@@ -4,15 +4,7 @@ import { ZodType } from "zod";
 /** The schema object can validate any subset of body / params / query / headers */
 export type SchemaMap = Partial<Record<"body" | "params" | "query" | "headers", ZodType>>;
 
-/**
- * Validation middleware factory.
- *
- * Usage:
- *   router.post("/signup", validation(signUpSchema), handler)
- *
- * On failure → 422 with a structured errors array.
- * On success → calls next().
- */
+
 export const validation = (schema: SchemaMap) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const validationErrors: object[] = [];

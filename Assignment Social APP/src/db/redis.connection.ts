@@ -13,7 +13,7 @@ export const connectRedis = async () => {
   console.log("✅ Redis connected");
 };
 
-// ─── OTP Helpers ────────────────────────────────────────────────────────────
+
 
 /** OTP lives for 5 minutes */
 const OTP_TTL_SECONDS = 300;
@@ -41,7 +41,7 @@ export const deleteOTP = async (userId: string): Promise<void> => {
   await redisClient.del(`otp:${userId}`);
 };
 
-// ─── Session / Token Blacklist ───────────────────────────────────────────────
+
 
 /**
  * Blacklist a JWT (e.g. on logout) until it would have naturally expired.
@@ -60,7 +60,7 @@ export const isTokenBlacklisted = async (jti: string): Promise<boolean> => {
   return result !== null;
 };
 
-// ─── Online Presence ─────────────────────────────────────────────────────────
+
 
 /**
  * Mark a user as online (no expiry — cleared on logout or disconnect).

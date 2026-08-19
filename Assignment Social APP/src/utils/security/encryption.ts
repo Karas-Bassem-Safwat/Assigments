@@ -6,7 +6,7 @@ export const encrypt = (data: string) => {
     process.env.ENC_KEY as string,
   ).toString();
 
-  return ecryptData;
+  return ecryptData.toString();
 };
 
 export const decrypt = (data: string) => {
@@ -15,5 +15,5 @@ export const decrypt = (data: string) => {
     process.env.ENC_KEY as string,
   );
 
-  return decryptedData;
+  return decryptedData.toString();
 };

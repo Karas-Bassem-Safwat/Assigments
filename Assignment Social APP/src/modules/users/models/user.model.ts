@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
-import { Gender, Iuser, Role } from "./user.defenition";
-import { hashPassword } from "../../utils/security/hashing";
-import { decrypt, encrypt } from "../../utils/security/encryption";
+import { Gender, Iuser, Role } from "../types/user.types";
+import { hashPassword } from "../../../utils/security/hashing";
+import { decrypt, encrypt } from "../../../utils/security/encryption";
+import { friendRequestEnum } from "../types/friendRequest.types";
 
 const userSchema = new Schema<Iuser>(
   {
@@ -94,7 +95,20 @@ const userSchema = new Schema<Iuser>(
     timestamps: true,
     toJSON: { getters: true },
     toObject: { getters: true },
-  }
+  },
 );
+
+userSchema.virtual("received", {
+  localField: "_id",
+  foreignField: "to",
+  ref: "frienRequest",
+  match:{status:friendRequestEnum.accepted}
+});
+userSchema.virtual("sent", {
+  localField: "_id",
+  foreignField: "from",
+  ref: "frienRequest",
+  match:{status:friendRequestEnum.accepted}
+});
 
 export const userModel = model<Iuser>("User", userSchema);
