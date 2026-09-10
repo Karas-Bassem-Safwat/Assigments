@@ -7,11 +7,11 @@ exports.decrypt = exports.encrypt = void 0;
 const crypto_js_1 = __importDefault(require("crypto-js"));
 const encrypt = (data) => {
     const ecryptData = crypto_js_1.default.AES.encrypt(data, process.env.ENC_KEY).toString();
-    return ecryptData;
+    return ecryptData.toString();
 };
 exports.encrypt = encrypt;
 const decrypt = (data) => {
     const decryptedData = crypto_js_1.default.AES.decrypt(data, process.env.ENC_KEY);
-    return decryptedData;
+    return decryptedData.toString();
 };
 exports.decrypt = decrypt;

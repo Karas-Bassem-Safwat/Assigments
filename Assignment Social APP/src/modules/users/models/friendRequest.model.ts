@@ -3,7 +3,6 @@ import {
   friendRequestEnum,
   IfriendRequest,
 } from "../types/friendRequest.types";
-import { number } from "zod";
 
 const friendRequestSchema = new Schema<IfriendRequest>(
   {

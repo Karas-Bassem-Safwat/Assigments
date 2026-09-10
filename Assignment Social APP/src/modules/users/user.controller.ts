@@ -4,6 +4,8 @@ import * as userValidatoin from "./userValidation";
 import authMiddleware from "../../middleware/auth.middleware";
 import { userService } from "./user.service";
 import { ObjectId, Types } from "mongoose";
+
+import chatRouter from "../chat/chat.controller";
 const router = Router();
 
 export const routes = {
@@ -15,16 +17,12 @@ export const routes = {
   listFriends: "/list-friends",
 };
 
+router.use("/:id/chat", chatRouter);
 router.post(
   routes.sendFriendRequest,
   validation(userValidatoin.sendFriendRequestSchema),
   authMiddleware,
   async (req, res) => {
-    if (!req.user) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-
     const { to } = req.body as userValidatoin.sendFriendRequestData;
     const { id: from } = req.user;
     await userService.sendFriendRequest({ to, from });
@@ -47,11 +45,6 @@ router.patch(
 );
 
 router.get(routes.listFriendRequest, async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-
   const userId = req.user._id as Types.ObjectId;
   const { isTo = true } = req.query;
   const { data } = await userService.listfriendRequests({
@@ -84,7 +77,7 @@ router.patch(
 );
 
 router.get(routes.listFriends, authMiddleware, async (req, res) => {
-  const user = req.user!;
+  const user = req.user;
   const data = await userService.listFriends({ user });
   return res.status(200).json({ message: `friends :\n ${data} ` });
 });

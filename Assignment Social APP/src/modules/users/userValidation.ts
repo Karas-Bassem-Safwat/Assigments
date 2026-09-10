@@ -58,4 +58,13 @@ export type cancelFriendRequestData = z.infer<
   typeof cancelFriendRequest.params
 >;
 
- 
+export const graphqlSchemaValidation = {
+  args: z.strictObject({
+    name: z.string().nonempty,
+    age: z.number().optional(),
+  }),
+};
+
+export type graphqlSchemaValidationData = z.infer<
+  typeof graphqlSchemaValidation.args
+>;

@@ -11,7 +11,13 @@ export interface AuthenticatedRequest extends Request {
 
 declare module "express-serve-static-core" {
   interface Request {
-    user?: Huser;
+    user: Huser;
+  }
+}
+
+declare module "socket.io" {
+  interface Socket {
+    user: Huser;
   }
 }
 
@@ -45,8 +51,8 @@ const authMiddleware = async (
 
     next();
   } catch {
-    next(new Auth("Invalid or expired token"));
-  }
+  next(new Auth("Invalid or expired token"));
+}
 };
 
 export default authMiddleware;
